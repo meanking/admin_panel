@@ -67,64 +67,72 @@
                     :mask-closable="false"
                     :closable="false"
                     >
-                    <Form inline>
-                        <FormItem>
+                    <row>
+                        <i-col span="12">
                             <Input v-model="data.firstname" placeholder="First name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Input v-model="data.middlename" placeholder="Middle name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Input v-model="data.lastname" placeholder="Last name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                    </Form>
-                    <Input v-model="data.address" placeholder="Address" maxlength="120" show-word-limit style="margin-bottom: 25px;" />
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="24">
+                            <Input v-model="data.address" placeholder="Address" maxlength="120" show-word-limit />
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Select v-model="data.country_id" placeholder="Select country" style="width:200px">
                                 <Option v-for="(country, i) in countries" :value="country.id" :key="i">{{ country.name }}</Option>
                             </Select>
-                        </FormItem>
-                        <FormItem>
-                            <Select v-model="data.state_id" placeholder="Select state" style="width:200px">
-                                <Option v-for="(state, i) in states" :value="state.id" :key="i">{{ state.name }}</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Select v-model="data.city_id" placeholder="Select city" style="width:200px">
                                 <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
                             </Select>
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
+                            <Select v-model="data.city_id" placeholder="Select city" style="width:200px">
+                                <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
+                            </Select>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Input v-model="data.zip" placeholder="Zip" maxlength="10" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Input v-model="data.age" placeholder="Age" style="width:200px" />
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <DatePicker type="date" format="yyyy-MM-dd" v-model="data.birthdate" placeholder="Select birthdate" style="width: 200px"></DatePicker>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <DatePicker type="date" format="yyyy-MM-dd" v-model="data.date_hired" placeholder="Select hired date" style="width: 200px"></DatePicker>
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Select v-model="data.department_id" placeholder="Select department" style="width:200px">
                                 <Option v-for="(department, i) in departments" :value="department.id" :key="i">{{ department.name }}</Option>
                             </Select>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Select v-model="data.division_id" placeholder="Select division" style="width:200px">
                                 <Option v-for="(division, i) in divisions" :value="division.id" :key="i">{{ division.name }}</Option>
                             </Select>
-                        </FormItem>
-                    </Form>
-                    <div>
+                        </i-col>
+                    </row>
+                    <div style="margin-top: 15px;">
                         <Upload
                             :before-upload="handleUpload"
                             action="">
@@ -145,64 +153,72 @@
                     :mask-closable="false"
                     :closable="false"
                     >
-                    <Form inline>
-                        <FormItem>
+                    <row>
+                        <i-col span="12">
                             <Input v-model="selectedObj.firstname" placeholder="First name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Input v-model="selectedObj.middlename" placeholder="Middle name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Input v-model="selectedObj.lastname" placeholder="Last name" maxlength="60" show-word-limit style="width:200px" />
-                        </FormItem>
-                    </Form>
-                    <Input v-model="selectedObj.address" placeholder="Address" maxlength="120" show-word-limit style="margin-bottom: 25px;" />
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="24">
+                            <Input v-model="selectedObj.address" placeholder="Address" maxlength="120" show-word-limit />
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Select v-model="selectedObj.country_id" placeholder="Select country" style="width:200px">
                                 <Option v-for="(country, i) in countries" :value="country.id" :key="i">{{ country.name }}</Option>
                             </Select>
-                        </FormItem>
-                        <FormItem>
-                            <Select v-model="selectedObj.state_id" placeholder="Select state" style="width:200px">
-                                <Option v-for="(state, i) in states" :value="state.id" :key="i">{{ state.name }}</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Select v-model="selectedObj.city_id" placeholder="Select city" style="width:200px">
                                 <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
                             </Select>
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
+                            <Select v-model="selectedObj.city_id" placeholder="Select city" style="width:200px">
+                                <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
+                            </Select>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Input v-model="selectedObj.zip" placeholder="Zip" maxlength="10" show-word-limit style="width:200px" />
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Input v-model="selectedObj.age" placeholder="Age" style="width:200px" />
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <DatePicker type="date" format="yyyy-MM-dd" v-model="selectedObj.birthdate" placeholder="Select birthdate" style="width: 200px"></DatePicker>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <DatePicker type="date" format="yyyy-MM-dd" v-model="selectedObj.date_hired" placeholder="Select hired date" style="width: 200px"></DatePicker>
-                        </FormItem>
-                    </Form>
-                    <Form inline>
-                        <FormItem>
+                        </i-col>
+                    </row>
+                    <row style="margin-top: 15px;">
+                        <i-col span="12">
                             <Select v-model="selectedObj.department_id" placeholder="Select department" style="width:200px">
                                 <Option v-for="(department, i) in departments" :value="department.id" :key="i">{{ department.name }}</Option>
                             </Select>
-                        </FormItem>
-                        <FormItem>
+                        </i-col>
+                        <i-col span="12">
                             <Select v-model="selectedObj.division_id" placeholder="Select division" style="width:200px">
                                 <Option v-for="(division, i) in divisions" :value="division.id" :key="i">{{ division.name }}</Option>
                             </Select>
-                        </FormItem>
-                    </Form>
-                    <div>
+                        </i-col>
+                    </row>
+                    <div style="margin-top: 15px;">
                         <Upload
                             :before-upload="selectedObjHandleUpload"
                             action="">
@@ -236,6 +252,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
     data() {
         return {
@@ -336,8 +354,8 @@ export default {
             formData.append('country_id', this.data.country_id);
             formData.append('zip', this.data.zip);
             formData.append('age', this.data.age);
-            formData.append('birthdate', this.data.birthdate);
-            formData.append('date_hired', this.data.date_hired);
+            formData.append('birthdate', moment(this.data.birthdate).format('YYYY-MM-DD'));
+            formData.append('date_hired', moment(this.data.date_hired).format('YYYY-MM-DD'));
             formData.append('department_id', this.data.department_id);
             formData.append('division_id', this.data.division_id);
             formData.append('picture', this.data.picture);
@@ -410,8 +428,8 @@ export default {
             formData.append('country_id', this.selectedObj.country_id);
             formData.append('zip', this.selectedObj.zip);
             formData.append('age', this.selectedObj.age);
-            formData.append('birthdate', this.selectedObj.birthdate);
-            formData.append('date_hired', this.selectedObj.date_hired);
+            formData.append('birthdate', moment(this.selectedObj.birthdate).format('YYYY-MM-DD'));
+            formData.append('date_hired', moment(this.selectedObj.date_hired).format('YYYY-MM-DD'));
             formData.append('department_id', this.selectedObj.department_id);
             formData.append('division_id', this.selectedObj.division_id);
             formData.append('picture', this.selectedObj.picture);
@@ -463,6 +481,7 @@ export default {
                 this.cities = res_cities.data.cities
             }
             this.selectedObj = employee
+            this.selectedObj.middlename = employee.middlename == null || employee.middlename == 'null'? '':employee.middlename
             this.editModal   = true
         },
         async deleteEmployee(employee) {
