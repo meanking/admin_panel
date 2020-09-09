@@ -47,6 +47,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- State adding modal -->
                 <Modal
@@ -125,25 +126,37 @@ export default {
             searchData: {
                 country_id: '',
                 name: ''
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res = await this.callApi('get', '/api/state/get')
         const res2 = await this.callApi('get', '/api/country/get')
-        if (res.status == 200) {
-            this.states = res.data
-        } else {
-            this.swr('')
-        }
         if (res2.status == 200) {
-            this.countries = res2.data
+            this.countries = res2.data.countries
         } else {
             this.swr('')
         }
+        axios({
+            method: 'GET',
+            url: '/api/state/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.states = res.data.states
+                this.total  = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -152,7 +165,7 @@ export default {
         async addState() {
             this.isAdding = true
             const res = await this.callApi('post', '/api/state/create', this.data)
-            if (res.status == 201) {
+            if (res.status == 200) {
                 this.states.unshift(res.data)
                 this.s('State has been registered successfully')
                 this.addModal = false
@@ -206,6 +219,23 @@ export default {
             this.index = index
             this.deleteModal = true
             this.selectedObj = state
+        },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/state/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.states = res.data.states
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
         }
     },
     watch: {

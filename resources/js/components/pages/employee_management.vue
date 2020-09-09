@@ -59,6 +59,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- Employee adding modal -->
                 <Modal
@@ -305,37 +306,49 @@ export default {
             searchData: {
                 fullname: '',
                 department_id: '',
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res_employees   = await this.callApi('get', '/api/employee/get')
         const res_countries   = await this.callApi('get', '/api/country/get')
         const res_departments = await this.callApi('get', '/api/department/get')
         const res_divisions   = await this.callApi('get', '/api/division/get')
-        if (res_employees.status == 200) {
-            this.employees = res_employees.data
-        } else {
-            this.swr('')
-        }
         if (res_countries.status == 200) {
-            this.countries = res_countries.data
+            this.countries = res_countries.data.countries
         } else {
             this.swr('')
         }
         if (res_departments.status == 200) {
-            this.departments = res_departments.data
+            this.departments = res_departments.data.departments
         } else {
             this.swr('')
         }
         if (res_divisions.status == 200) {
-            this.divisions = res_divisions.data
+            this.divisions = res_divisions.data.divisions
         } else {
             this.swr('')
         }
+        axios({
+            method: 'GET',
+            url: '/api/employee/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.employees = res.data.employees
+                this.total     = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -507,6 +520,23 @@ export default {
         selectedObjHandleUpload (file) {
             this.selectedObj.picture = file;
         },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/employee/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.employees = res.data.employees
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
+        }
     },
     watch: {
         searchData: {

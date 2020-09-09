@@ -47,6 +47,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- City adding modal -->
                 <Modal
@@ -125,25 +126,38 @@ export default {
             searchData: {
                 state_id: '',
                 name: ''
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res = await this.callApi('get', '/api/city/get')
         const res2 = await this.callApi('get', '/api/state/get')
-        if (res.status == 200) {
-            this.cities = res.data
-        } else {
-            this.swr('')
-        }
         if (res2.status == 200) {
-            this.states = res2.data
+            this.states = res2.data.states
         } else {
             this.swr('')
         }
+
+        axios({
+            method: 'GET',
+            url: '/api/city/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.cities = res.data.cities
+                this.total  = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -206,6 +220,23 @@ export default {
             this.index = index
             this.deleteModal = true
             this.selectedObj = city
+        },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/city/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.cities = res.data.cities
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
         }
     },
     watch: {

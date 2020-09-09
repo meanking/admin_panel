@@ -11,6 +11,7 @@ use App\State;
 use App\City;
 use App\Employee;
 use Validator;
+use Illuminate\Http\JsonResponse;
 
 class ApiController extends Controller
 {
@@ -94,12 +95,20 @@ class ApiController extends Controller
 
     /**
      * Get users
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUsers()
+    public function getUsers($page = 0, $pageSize = 0)
     {
-        return User::orderBy('id', 'desc')->get();
+        $total = User::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'     => $total,
+            'users' => $pageSize == 0? User::orderBy('id', 'desc')->get() : User::offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -193,12 +202,20 @@ class ApiController extends Controller
 
     /**
      * Get departments
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDepartments()
+    public function getDepartments($page = 0, $pageSize = 0)
     {
-        return Department::orderBy('id', 'desc')->get();
+        $total = Department::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'     => $total,
+            'departments' => $pageSize == 0? Department::orderBy('id', 'desc')->get() : Department::offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -284,12 +301,19 @@ class ApiController extends Controller
 
     /**
      * Get divisions
-     * 
+     * @param int $page
+     * @param int $pageSize
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDivisions()
+    public function getDivisions($page = 0, $pageSize = 0)
     {
-        return Division::orderBy('id', 'desc')->get();
+        $total = Division::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'     => $total,
+            'divisions' => $pageSize == 0? Division::orderBy('id', 'desc')->get() : Division::offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -379,12 +403,20 @@ class ApiController extends Controller
 
     /**
      * Get countries
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCountries()
+    public function getCountries($page = 0, $pageSize = 0)
     {
-        return Country::with('states')->orderBy('id', 'desc')->get();
+        $total = Country::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'     => $total,
+            'countries' => $pageSize == 0? Country::with('states')->orderBy('id', 'desc')->get() : Country::with('states')->offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -498,14 +530,20 @@ class ApiController extends Controller
 
     /**
      * Get states
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getStates()
+    public function getStates($page = 0, $pageSize = 0)
     {
-        $states = State::with('country')->with('cities')->orderBy('id', 'desc')->get();
-
-        return $states;
+        $total  = State::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'  => $total,
+            'states' => $pageSize == 0? State::with('country')->with('cities')->orderBy('id', 'desc')->get() : State::with('country')->with('cities')->offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -621,14 +659,20 @@ class ApiController extends Controller
 
     /**
      * Get cities
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCities()
+    public function getCities($page = 0, $pageSize = 0)
     {
-        $cities = City::with('state')->orderBy('id', 'desc')->get();
-
-        return $cities;
+        $total  = City::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'  => $total,
+            'cities' => $pageSize == 0? City::with('state')->orderBy('id', 'desc')->get() : City::with('state')->offset($offset)->limit($pageSize)->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -856,21 +900,38 @@ class ApiController extends Controller
 
     /**
      * Get employees
+     * @param int $page
+     * @param int $pageSize
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getEmployees()
+    public function getEmployees($page = 0, $pageSize = 0)
     {
-        $employees = Employee::with('country')
-                        ->with('state')
-                        ->with('city')
-                        ->with('department')
-                        ->with('division')
-                        ->where('deleted_at', NULL)
-                        ->orderBy('id', 'desc')
-                        ->get();
-
-        return $employees;
+        $total  = Employee::count();
+        $offset = ($page - 1) * $pageSize;
+        $responseData = [
+            'total'     => $total,
+            'employees' => $pageSize == 0? 
+                                Employee::with('country')
+                                    ->with('state')
+                                    ->with('city')
+                                    ->with('department')
+                                    ->with('division')
+                                    ->where('deleted_at', NULL)
+                                    ->orderBy('id', 'desc')
+                                    ->get() : 
+                                Employee::with('country')
+                                    ->with('state')
+                                    ->with('city')
+                                    ->with('department')
+                                    ->with('division')
+                                    ->where('deleted_at', NULL)
+                                    ->offset($offset)
+                                    ->limit($pageSize)
+                                    ->orderBy('id', 'desc')
+                                    ->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**

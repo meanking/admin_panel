@@ -52,6 +52,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- User adding modal -->
                 <Modal
@@ -138,19 +139,31 @@ export default {
                 username: '',
                 firstname: '',
                 lastname: '',
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res = await this.callApi('get', '/api/user/get')
-        if (res.status == 200) {
-            this.users = res.data
-        } else {
-            this.swr('Failed')
-        }
+        axios({
+            method: 'GET',
+            url: '/api/user/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.users = res.data.users
+                this.total = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -221,6 +234,23 @@ export default {
             this.index = index
             this.deleteModal = true
             this.selectedUser = user
+        },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/user/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.users = res.data.users
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
         }
     },
     watch: {

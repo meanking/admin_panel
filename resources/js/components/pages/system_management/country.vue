@@ -44,6 +44,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- Country adding modal -->
                 <Modal
@@ -118,19 +119,31 @@ export default {
             searchData: {
                 country_code: '',
                 name: ''
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,            
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res = await this.callApi('get', '/api/country/get')
-        if (res.status == 200) {
-            this.countries = res.data
-        } else {
-            this.swr('')
-        }
+        axios({
+            method: 'GET',
+            url: '/api/country/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.countries = res.data.countries
+                this.total     = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -191,6 +204,23 @@ export default {
             this.index = index
             this.deleteModal = true
             this.selectedObj = country
+        },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/country/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.countries = res.data.countries
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
         }
     },
     watch: {

@@ -39,6 +39,7 @@
 						</table>
 					</div>
 				</div>
+                <Page :total="total" :current="page" @on-change="handlePage" />
 
                 <!-- Division adding modal -->
                 <Modal
@@ -109,19 +110,31 @@ export default {
             deleteModal: false,
             searchData: {
                 name: ''
-            }
+            },
+            total: 0,
+            page: 1,
+            pageSize: 10,            
         }
     },
     beforeCreate() {
 
     },
     async created() {
-        const res = await this.callApi('get', '/api/division/get')
-        if (res.status == 200) {
-            this.divisions = res.data
-        } else {
-            this.swr('')
-        }
+        axios({
+            method: 'GET',
+            url: '/api/division/get/'+this.page+'/'+this.pageSize
+        })
+        .then(res => {
+            if (res.status == 200) {
+                this.divisions = res.data.divisions
+                this.total     = res.data.total
+            } else {
+                this.swr('')
+            }
+        })
+        .catch(error => {
+            console.log('error::', error);
+        })
     },
     mounted() {
 
@@ -181,6 +194,23 @@ export default {
             this.index = index
             this.deleteModal = true
             this.selectedObj = division
+        },
+        handlePage(p) {
+            this.page = p
+            axios({
+                method: 'GET',
+                url: '/api/division/get/'+this.page+'/'+this.pageSize
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    this.divisions = res.data.divisions
+                } else {
+                    this.swr('')
+                }
+            })
+            .catch(error => {
+                console.log('error::', error);
+            })
         }
     },
     watch: {
