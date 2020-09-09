@@ -7,10 +7,21 @@
         <title>Test Admin Panel</title>
 
         <link rel="stylesheet" href="/css/all.css">
+        <script>
+            (function() {
+                window.Laravel = {
+                    csrfToken: '{{ csrf_token() }}'
+                };
+            })
+        </script>
     </head>
     <body>
         <div id="app">
-            <mainapp></mainapp>
+            @if(Auth::check())
+                <mainapp :user="{{Auth::user()}}"></mainapp>
+            @else
+                <mainapp></mainapp>
+            @endif
         </div>
     </body>
     <script src="{{ mix('/js/app.js') }}"></script>

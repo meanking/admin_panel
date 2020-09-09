@@ -10,6 +10,7 @@ import Country from './components/pages/system_management/country'
 import State from './components/pages/system_management/state'
 import City from './components/pages/system_management/city'
 import User from './components/pages/user_management/user'
+import Login from './components/pages/login'
 
 const routes = [
     {
@@ -51,6 +52,11 @@ const routes = [
         path: '/user',
         name: 'user',
         component: User
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login
     }
 ]
 

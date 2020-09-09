@@ -12,9 +12,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::any('/', function () {
-    return view('welcome');
-});
+Route::any('/', 'ApiController@index');
+Route::any('/logout', 'ApiController@logout');
 
 Route::prefix('api')->group(function() {
     Route::prefix('user')->group(function() {
@@ -69,8 +68,7 @@ Route::prefix('api')->group(function() {
         Route::post('delete', 'ApiController@deleteEmployee')->name('delete');
         Route::post('search', 'ApiController@searchEmployees')->name('search');
     });
+    Route::post('login', 'ApiController@login')->name('login');
 });
 
-Route::any('{slug}', function () {
-    return view('welcome');
-});
+Route::any('{slug}', 'ApiController@index');

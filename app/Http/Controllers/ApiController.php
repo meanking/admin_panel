@@ -12,9 +12,29 @@ use App\City;
 use App\Employee;
 use Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
+    public function index(Request $request)
+    {
+        if (!Auth::check() && $request->path() != 'login') {
+            return redirect('/login');
+        }
+        if (!Auth::check() && $request->path() == 'login') {
+            return view('welcome');
+        }
+        if ($request->path() == 'login') {
+            return redirect('/');
+        }
+        return view('welcome');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //                                                         |
     //                           USER                          |
@@ -964,5 +984,36 @@ class ApiController extends Controller
                     ->get();
 
         return $employees;
+    }
+
+    /**
+     * User login
+     * 
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'    => 'required|email',
+            'password' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Invalid parameters.',
+                'errors'  => $validator->errors()
+            ], 401);
+        }
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json([
+                'msg' => 'You are logged in'
+            ]);
+        } else {
+            return response()->json([
+                'msg' => 'Incorrect login details'
+            ], 401);
+        }
     }
 }
