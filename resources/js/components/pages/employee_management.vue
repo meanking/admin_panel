@@ -92,8 +92,8 @@
                             </Select>
                         </i-col>
                         <i-col span="12">
-                            <Select v-model="data.city_id" placeholder="Select city" style="width:200px">
-                                <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
+                            <Select v-model="data.state_id" placeholder="Select state" style="width:200px">
+                                <Option v-for="(state, i) in states" :value="state.id" :key="i">{{ state.name }}</Option>
                             </Select>
                         </i-col>
                     </row>
@@ -178,8 +178,8 @@
                             </Select>
                         </i-col>
                         <i-col span="12">
-                            <Select v-model="selectedObj.city_id" placeholder="Select city" style="width:200px">
-                                <Option v-for="(city, i) in cities" :value="city.id" :key="i">{{ city.name }}</Option>
+                            <Select v-model="selectedObj.state_id" placeholder="Select state" style="width:200px">
+                                <Option v-for="(state, i) in states" :value="state.id" :key="i">{{ state.name }}</Option>
                             </Select>
                         </i-col>
                     </row>
@@ -350,7 +350,7 @@ export default {
             formData.append('lastname', this.data.lastname);
             formData.append('address', this.data.address);
             formData.append('city_id', this.data.city_id);
-            formData.append('state_id', this.data.city_id);
+            formData.append('state_id', this.data.state_id);
             formData.append('country_id', this.data.country_id);
             formData.append('zip', this.data.zip);
             formData.append('age', this.data.age);
@@ -424,7 +424,7 @@ export default {
             formData.append('lastname', this.selectedObj.lastname);
             formData.append('address', this.selectedObj.address);
             formData.append('city_id', this.selectedObj.city_id);
-            formData.append('state_id', this.selectedObj.city_id);
+            formData.append('state_id', this.selectedObj.state_id);
             formData.append('country_id', this.selectedObj.country_id);
             formData.append('zip', this.selectedObj.zip);
             formData.append('age', this.selectedObj.age);
