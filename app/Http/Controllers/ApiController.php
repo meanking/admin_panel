@@ -153,7 +153,12 @@ class ApiController extends Controller
         $query->when($lastname, function($q, $lastname) {
             return $q->where('lastname', 'like', '%'.$lastname.'%');
         });
-        return $query->orderBy('id', 'desc')->get();
+
+        $responseData = [
+            'total' => $query->count(),
+            'users' => $query->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,7 +257,12 @@ class ApiController extends Controller
         $query->when($name, function($q, $name) {
             return $q->where('name', 'like', '%'.$name.'%');
         });
-        return $query->orderBy('id', 'desc')->get();
+
+        $responseData = [
+            'total' => $query->count(),
+            'departments' => $query->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -350,7 +360,13 @@ class ApiController extends Controller
         $query->when($name, function($q, $name) {
             return $q->where('name', 'like', '%'.$name.'%');
         });
-        return $query->orderBy('id', 'desc')->get();
+
+        $responseData = [
+            'total'     => $query->count(),
+            'divisions' => $query->orderBy('id', 'desc')->get()
+        ];
+
+        return response()->json($responseData);
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -457,7 +473,12 @@ class ApiController extends Controller
         $query->when($name, function($q, $name) {
             return $q->where('name', 'like', '%'.$name.'%');
         });
-        return $query->with('states')->orderBy('id', 'desc')->get();
+
+        $responseData = [
+            'total' => $query->count(),
+            'countries' => $query->with('states')->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -584,9 +605,12 @@ class ApiController extends Controller
         $query->when($name, function($q, $name) {
             return $q->where('name', 'like', '%'.$name.'%');
         });
-        $states = $query->with('country')->with('cities')->orderBy('id', 'desc')->get();
 
-        return $states;
+        $responseData = [
+            'total' => $query->count(),
+            'states' => $query->with('country')->with('cities')->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -713,9 +737,12 @@ class ApiController extends Controller
         $query->when($name, function($q, $name) {
             return $q->where('name', 'like', '%'.$name.'%');
         });
-        $cities = $query->with('state')->orderBy('id', 'desc')->get();
 
-        return $cities;
+        $responseData = [
+            'total' => $query->count(),
+            'cities' => $query->with('state')->orderBy('id', 'desc')->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**
@@ -971,19 +998,24 @@ class ApiController extends Controller
             return $q->where('department_id', $department_id);
         });
         $query->when($name, function($q, $name) {
-            return $q->where('firstname', 'like', '%'.$name.'%')
-                        ->orWhere('middlename', 'like', '%'.$name.'%')
-                        ->orWhere('lastname', 'like', '%'.$name.'%');
+            return $q->where(function($qu) use($name) {
+                $qu->where('firstname', 'like', '%'.$name.'%')
+                    ->orWhere('middlename', 'like', '%'.$name.'%')
+                    ->orWhere('lastname', 'like', '%'.$name.'%');
+            });
         });
-        $employees = $query->with('country')
-                    ->with('state')
-                    ->with('city')
-                    ->with('department')
-                    ->with('division')
-                    ->orderBy('id', 'desc')
-                    ->get();
 
-        return $employees;
+        $responseData = [
+            'total' => $query->count(),
+            'employees' => $query->with('country')
+                                ->with('state')
+                                ->with('city')
+                                ->with('department')
+                                ->with('division')
+                                ->orderBy('id', 'desc')
+                                ->get()
+        ];
+        return response()->json($responseData);
     }
 
     /**

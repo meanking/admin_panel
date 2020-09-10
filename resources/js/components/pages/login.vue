@@ -12,7 +12,7 @@
                         <Input type="password" v-model="data.password"  placeholder="******"  />
                     </div>
                     <div class="login_footer">
-                        <Button type="primary" @click="login" :disabled="isLogging" :loading="isLogging">{{isLogging ? 'Loging...' : 'Login'}}</Button>
+                        <Button type="primary" @click="login" :disabled="isLogging || isLocked" :loading="isLogging">{{isLogging ? 'Loging...' : 'Login'}}</Button>
                     </div>
             </div>
         </div>
@@ -29,9 +29,10 @@ export default {
                 password: ''
             }, 
             isLogging: false, 
+            isLocked: localStorage.getItem('loginCounter') >= 3? true: false, 
         }
-    }, 
-
+    },
+    
     methods : {
         async login(){
             if(this.data.email.trim()=='') return this.e('Email is required')
@@ -42,6 +43,12 @@ export default {
                 this.s(res.data.msg)
                 window.location = '/'
             }else{
+                if (!localStorage.getItem('loginCounter')) {
+                    localStorage.setItem('loginCounter', 1)
+                } else {
+                    let loginCounter = localStorage.getItem('loginCounter')
+                    localStorage.setItem('loginCounter', parseInt(loginCounter) + 1)
+                }
                 if(res.status===401){
                     this.i(res.data.msg)
                 }else if(res.status==422){
@@ -51,6 +58,14 @@ export default {
                 }
                 else{
                     this.swr()
+                }
+                if (localStorage.getItem('loginCounter') == 3) {
+                    this.isLocked = true
+                    this.i('You failed 3 times to login. You can retry in 5 mins.')
+                    setTimeout(() => {
+                        localStorage.setItem('loginCounter', 0)
+                        this.isLocked = false
+                    }, 300000);
                 }
             }
             this.isLogging = false

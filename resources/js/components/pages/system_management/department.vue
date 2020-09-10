@@ -218,7 +218,8 @@ export default {
             async handler(val) {
                 const res = await this.callApi('post', '/api/department/search', val)
                 if (res.status == 200) {
-                    this.departments = res.data
+                    this.total       = res.data.total
+                    this.departments = res.data.departments
                 }
             },
             deep: true

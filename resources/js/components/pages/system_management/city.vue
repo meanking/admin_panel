@@ -244,7 +244,8 @@ export default {
             async handler(val) {
                 const res = await this.callApi('post', '/api/city/search', val)
                 if (res.status == 200) {
-                    this.cities = res.data
+                    this.total  = res.data.total
+                    this.cities = res.data.cities
                 }
             },
             deep: true

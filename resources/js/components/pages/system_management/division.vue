@@ -218,7 +218,8 @@ export default {
             async handler(val) {
                 const res = await this.callApi('post', '/api/division/search', val)
                 if (res.status == 200) {
-                    this.divisions = res.data
+                    this.total     = res.data.total
+                    this.divisions = res.data.divisions
                 }
             },
             deep: true
